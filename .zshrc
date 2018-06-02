@@ -5,6 +5,9 @@
   export ZSH=/home/patrick/.oh-my-zsh
 source ~/.zplug/init.zsh
 
+# CUSTOM EXPORTS
+export TERM=xterm-256color
+
 # Powerline daemon
 powerline-daemon -q
 
@@ -105,3 +108,5 @@ source ~/powerline/bindings/zsh/powerline.zsh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

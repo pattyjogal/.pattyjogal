@@ -31,14 +31,22 @@ Plug 'Chiel92/vim-autoformat'
 Plug 'google/vim-maktaba'
 Plug 'google/vim-codefmt'
 Plug 'tpope/vim-commentary'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 " Webdev
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
 
+" Django
+Plug 'tweekmonster/django-plus.vim'
+
 " Version Control
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+
+" Python
+" Plug 'klen/python-mode', { 'for': ['python'], 'branch': 'develop' }
 
 call plug#end()
 
@@ -79,3 +87,56 @@ au FileType htmldjango setl sw=2 sts=2 et
 
 " NERDTree thinks it deserves all that room? Hah!
 :let g:NERDTreeWinSize=50
+
+" Python
+" let g:pymode_python = 'python3'
+" let g:pymode_rope = 1
+" let g:pymode_rope_autoimport = 1
+" let g:ropevim_autoimport_modules = ["os.*","traceback","django.*","typings"]
+" let g:pymode_rope_autoimport_modules = ["os.*","traceback","django.*", "typings"]
+" let g:pymode_lint_cwindow = 0
+
+" Git
+set diffopt+=vertical
+
+" UltiSnips settings
+let g:UltiSnipsExpandTrigger="<c-l>"
+let g:UltiSnipsJumpForwardTrigger="<Right>"
+let g:UltiSnipsJumpBackwardTrigger="<Left>"
+
+" Possibly the coolest Django mapping ever
+let g:last_relative_dir = ''
+nnoremap \1 :call RelatedFile ("models.py")<cr>
+nnoremap \2 :call RelatedFile ("views.py")<cr>
+nnoremap \3 :call RelatedFile ("urls.py")<cr>
+nnoremap \4 :call RelatedFile ("admin.py")<cr>
+nnoremap \5 :call RelatedFile ("tests.py")<cr>
+nnoremap \6 :call RelatedFile ( "templates/" )<cr>
+nnoremap \7 :call RelatedFile ( "templatetags/" )<cr>
+nnoremap \8 :call RelatedFile ( "management/" )<cr>
+nnoremap \0 :e settings.py<cr>
+nnoremap \9 :e urls.py<cr>
+
+fun! RelatedFile(file)
+    " This is to check that the directory looks djangoish
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        exec "edit %:h/" . a:file
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+    if g:last_relative_dir != ''
+        exec "edit " . g:last_relative_dir . a:file
+        return ''
+    endif
+    echo "Cant determine where relative file is : " . a:file
+    return ''
+endfun
+
+fun SetAppDir()
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+endfun
+autocmd BufEnter *.py call SetAppDir()
+set expandtab ts=4 sw=4 ai

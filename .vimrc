@@ -33,10 +33,12 @@ Plug 'google/vim-codefmt'
 Plug 'tpope/vim-commentary'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'w0rp/ale'
 
 " Webdev
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
+Plug 'chrisbra/Colorizer'
 
 " Django
 Plug 'tweekmonster/django-plus.vim'
@@ -46,8 +48,12 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
 " Python
-" Plug 'klen/python-mode', { 'for': ['python'], 'branch': 'develop' }
+Plug 'davidhalter/jedi-vim', { 'for': ['python'] }
+Plug 'mgedmin/python-imports.vim'
+Plug 'avakhov/vim-yaml'
 
+" Rust
+Plug 'cespare/vim-toml'
 call plug#end()
 
 " Change the colorscheme
@@ -73,12 +79,15 @@ if &term =~ '256color'
     set t_ut=
 endif
 
+let &t_ut=''
 
 " Keybinds
 noremap <F9> :Autoformat<CR>
 noremap <F10> :FormatCode<CR>
-map <F7> :b#<CR>
-"
+map <F7> :w<CR> :b#<CR>
+noremap <F5> :ImportName<CR>
+
+
 " I like my indents small
 set tabstop=4
 
@@ -140,3 +149,17 @@ fun SetAppDir()
 endfun
 autocmd BufEnter *.py call SetAppDir()
 set expandtab ts=4 sw=4 ai
+
+" Underline settings
+let &t_Cs = "\e[4:3m"
+let &t_Ce = "\e[4:0m"
+
+" Linter settings
+let g:ale_sign_error = '✖'
+let g:ale_sign_warning = '●'
+let g:ale_sign_column_always = 1
+let g:ale_python_pylint_options = "--load-plugins=pylint_django --max-line-length=100"
+hi ALEError gui=undercurl guisp=red cterm=undercurl
+hi ALEWarning gui=undercurl guisp=red cterm=undercurl
+
+set tags=tags

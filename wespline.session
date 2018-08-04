@@ -1,0 +1,13 @@
+enabled_layouts fat:bias=70
+
+cd /home/patrick/PycharmProjects/wespline/wespline
+
+title Editor
+launch zsh -c "source /home/patrick/VirtualEnvs/WeSplineEnv/bin/activate; source /home/patrick/Code/WeSpline/.env; vim ."
+
+title Interactive Shell
+launch zsh -c "source /home/patrick/VirtualEnvs/WeSplineEnv/bin/activate; source /home/patrick/Code/WeSpline/.env; zsh -l"
+
+title Server
+launch zsh -c "source /home/patrick/VirtualEnvs/WeSplineEnv/bin/activate; source /home/patrick/Code/WeSpline/.env; ./manage.py runserver"
+

@@ -110,3 +110,6 @@ source ~/powerline/bindings/zsh/powerline.zsh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# For work environment vars
+source ~/.work_env

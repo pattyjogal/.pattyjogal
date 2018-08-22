@@ -162,4 +162,6 @@ let g:ale_python_pylint_options = "--load-plugins=pylint_django --max-line-lengt
 hi ALEError gui=undercurl guisp=red cterm=undercurl
 hi ALEWarning gui=undercurl guisp=red cterm=undercurl
 
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|www'
+
 set tags=tags

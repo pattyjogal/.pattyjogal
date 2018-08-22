@@ -1,13 +1,11 @@
 enabled_layouts fat:bias=70
 
-cd /home/patrick/Code/wespline/wespline
-
 title Editor
-launch zsh -c "source /home/patrick/Code/wespline/.venv/bin/activate; source /home/patrick/Code/wespline/.env; vim . && $SHELL"
+launch zsh -ic "cd $WESPLINE_BASE_DIR; source $WESPLINE_VENV_DIR/bin/activate; source $WESPLINE_ENV_DIR/.env; vim .; zsh -l"
 
 title Interactive Shell
-launch zsh -c "source /home/patrick/Code/wespline/.venv/bin/activate; source /home/patrick/Code/wespline/.env; zsh -l"
+launch zsh -ic "cd $WESPLINE_BASE_DIR; source $WESPLINE_VENV_DIR/bin/activate; source $WESPLINE_ENV_DIR/.env; zsh -l"
 
 title Server
-launch zsh -c "source /home/patrick/Code/wespline/.venv/bin/activate; source /home/patrick/Code/wespline/.env; zsh -l; ./manage.py runserver && $SHELL"
+launch zsh -ic "cd $WESPLINE_MACHINES_DIR; vagrant up search; cd $WESPLINE_BASE_DIR; source $WESPLINE_VENV_DIR/bin/activate; source $WESPLINE_ENV_DIR/.env; ./manage.py runserver; zsh -l"
 

@@ -1,11 +1,15 @@
 # Install packages
-pacman -S yay
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
 
-yay -S - < arch_deps.txt
+cd ..
+
+sudo yay -S - < arch_deps.txt
 
 # Start off by installing python, and get the site packages directory
 
-yay -S extra/python
+sudo yay -S extra/python
 
 PYTHON_SPDIR = `python -c "import site; print(site.getsitepackages()[0])"`
 
@@ -18,7 +22,7 @@ ln -s  ~/Dotfiles/.zshrc ~/.zshrc
 
 # For ease of access, symlink the powerline directory to the home folder
 
-yay -S powerline
+sudo yay -S powerline
 ln -s $PYTHON_SPDIR/powerline ~/powerline
 
 #### VIM SETUP ####

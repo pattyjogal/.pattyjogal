@@ -54,6 +54,9 @@ Plug 'avakhov/vim-yaml'
 
 " Rust
 Plug 'cespare/vim-toml'
+
+" Go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 " Change the colorscheme

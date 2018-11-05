@@ -114,3 +114,8 @@ source ~/powerline/bindings/zsh/powerline.zsh
 
 # For work environment vars
 source ~/.work_env
+
+# For Go related things
+export PATH=$PATH:/usr/local/go/bin
+export GOPATH=$HOME/Code/Go
+export PATH="$PATH:$GOPATH/bin"

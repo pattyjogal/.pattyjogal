@@ -80,7 +80,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # Powerline prompt
-source ~/powerline/bindings/zsh/powerline.zsh
+source /usr/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"

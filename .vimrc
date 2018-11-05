@@ -18,7 +18,7 @@ Plug 'chriskempson/base16-vim'
 Plug 'terlar/base16-vim-powerline'
 
 " Autocompletion
-Plug 'Valloric/YouCompleteMe'
+" Plug 'Valloric/YouCompleteMe'
 
 " FileFinding
 Plug 'scrooloose/nerdtree'
@@ -54,6 +54,19 @@ Plug 'avakhov/vim-yaml'
 
 " Rust
 Plug 'cespare/vim-toml'
+
+" Notetaking
+Plug 'xolox/vim-notes'
+Plug 'xolox/vim-misc'
+
+" A Vim Plugin for Lively Previewing LaTeX PDF Output
+Plug 'xuhdev/vim-latex-live-preview'
+
+" MIPS
+Plug 'harenome/vim-mipssyntax'
+
+" JSX Stuff
+Plug 'mxw/vim-jsx'
 call plug#end()
 
 " Change the colorscheme
@@ -86,6 +99,9 @@ noremap <F9> :Autoformat<CR>
 noremap <F10> :FormatCode<CR>
 map <F7> :w<CR> :b#<CR>
 noremap <F5> :ImportName<CR>
+noremap <M-g> :Gwrite
+noremap <M-p> :Git push
+noremap <M-c> :Gcommit
 
 
 " I like my indents small
@@ -165,3 +181,20 @@ hi ALEWarning gui=undercurl guisp=red cterm=undercurl
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|www'
 
 set tags=tags
+
+set spell
+hi clear SpellBad
+hi SpellBad cterm=underline ctermfg=203
+
+" LaTeX Settings
+autocmd Filetype tex setl updatetime=1000
+let g:livepreview_previewer = 'evince'
+let g:livepreview_engine = 'pdflatex' . ' -shell-escape -interaction=nonstopmode $*'
+
+augroup FiletypeGroup
+    autocmd!
+    au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
+augroup END
+
+let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
+let g:ale_linter_aliases = {'jsx': 'css'}

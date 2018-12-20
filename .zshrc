@@ -119,4 +119,8 @@ export PATH=$PATH:/usr/local/go/bin
 export GOPATH=/home/patrick/Code/Go
 export PATH="$PATH:$GOPATH/bin"
 
+# In case this was somehow not set
 export PATH="$PATH:/usr/bin"
+# virtualenvwrapper stuff
+export WORKON_HOME=~/Envs
+source virtualenvwrapper.sh

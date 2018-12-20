@@ -1,0 +1,308 @@
+#+TITLE: My Emacs configuration
+#+STARTUP: showeverything
+#+PROPERTY: header-args:emacs-lisp :tangle yes
+
+* Emacs Config
+** Initialization
+#+begin_src emacs-lisp
+(package-initialize)
+#+end_src
+
+*** Customize output file
+I don't want stuff added by Customize to show up in =init.el=.
+
+#+begin_src emacs-lisp
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+     (load custom-file :noerror))
+#+end_src
+
+
+*** Add package repos
+#+begin_src emacs-lisp
+;; Adds melpa and org mode repos unless already defined
+(unless (assoc-default "melpa" package-archives)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
+(unless (assoc-default "org" package-archives)
+  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
+#+end_src
+
+
+Use =M-x package-refresh-contents= to reload the list of packages
+after adding these for the first time.
+
+
+*** Set up automatic package installation
+#+begin_src emacs-lisp
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(setq use-package-verbose t)
+(setq use-package-always-ensure t)
+(require 'use-package)
+
+;; Don't use outdated elisp bytecode
+(use-package auto-compile
+  :config (auto-compile-on-load-mode))
+(setq load-prefer-newer t)
+#+end_src
+
+*** Config utility packages
+#+begin_src emacs-lisp
+(use-package bind-key) ;; Utility for rebinding stuff
+(use-package diminish) ;; Allows use-package to hide minor modes from the modeline
+#+end_src
+
+** General Configuration
+#+begin_src emacs-lisp
+(use-package better-defaults)
+#+end_src
+
+*** General Behavior
+**** Splash Screen
+Don't display the "Welcome to Emacs" stuff
+
+#+begin_src emacs-lisp
+(setq inhibit-startup-screen t)
+#+end_src
+
+**** Backups
+By default, Emacs saves backup files in the current directory. These
+are the files ending in =~= that are cluttering up your directory
+lists. The following code stashes them all in =~/.emacs.d/backups=,
+where I can find them with =C-x C-f= (=find-file=) if I really need
+to.
+
+#+begin_src emacs-lisp
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+#+end_src
+
+**** Git
+For all my git version control needs
+#+begin_src emacs-lisp
+(use-package magit)
+#+end_src
+
+**** Evil
+A few settings to get things as Spacemacs-ey as possible.
+#+begin_src emacs-lisp
+(load-file "~/.emacs.d/lisp/evil-leader.el")
+
+(require 'evil-leader)
+(global-evil-leader-mode)
+(evil-leader/set-leader "<SPC>")
+(evil-leader/set-key
+  "p"   'projectile-command-map
+  "f"   'helm-find-files
+  "g"   'magit-status
+  "d"   (lambda ()
+          (interactive)
+          (find-file "~/.emacs.d/emacs-config.org"))
+  )
+(use-package spaceline-config
+  :ensure spaceline
+  :config
+  (spaceline-spacemacs-theme)
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+
+(use-package evil
+  :config (evil-mode))
+
+(use-package which-key
+  :config (which-key-mode))
+#+end_src
+
+**** Projectile
+For working in larger projects, and keeping track of all of 'em.
+#+begin_src emacs-lisp
+(use-package projectile
+  :config (projectile-mode +1))
+
+(use-package helm-projectile)
+#+end_src
+
+**** Helm
+Helm makes it easy to complete various things.
+
+#+begin_src emacs-lisp
+(use-package helm
+  :diminish helm-mode)
+(helm-mode 1)
+
+(global-set-key "\C-x\C-f" 'helm-find-files)
+(global-set-key "\M-x" 'helm-M-x)
+
+(ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
+#+end_src
+
+**** Abbrev mode
+I don't currently use Abbrev, so I disable it.
+#+begin_src emacs-lisp
+(abbrev-mode -1)
+#+end_src
+
+**** Delete trailing whitespace
+#+begin_src emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+
+**** Change "yes or no" to "y or n"
+Lazy people like me never want to type "yes" when "y" will suffice.
+
+#+begin_src emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+**** Line numbers
+As of Emacs 26, =linum-mode= is deprecated, to be replaced with
+=display-line-numbers-mode=.
+
+#+begin_src emacs-lisp
+(when (< emacs-major-version 26)
+  (global-linum-mode))
+
+(when (>= emacs-major-version 26)
+  (global-display-line-numbers-mode)
+  (global-linum-mode -1))
+#+end_src
+
+**** Automatically follow symlinks
+This is especially helpful when you use symlinks to manage your
+configuration files, as I do.
+
+#+begin_src emacs-lisp
+(setq vc-follow-symlinks t)
+#+end_src
+
+*** Appearance
+**** Color scheme
+#+begin_src emacs-lisp
+(use-package jbeans-theme
+  :config (load-theme 'jbeans t))
+#+end_src
+
+Again, you may have to launch an actual =emacs= instance in order to
+enable this theme for the first time.
+
+**** Time in the modeline
+#+begin_src emacs-lisp
+(display-time-mode 1)
+#+end_src
+
+**** Whitespace Mode
+#+begin_src emacs-lisp
+(custom-set-faces
+  '(whitespace-space ((t (:foreground "dim gray" :background nil))))
+  '(whitespace-line  ((t (:foreground "dim gray" :background nil))))
+  '(whitespace-empty ((t (:foreground nil :background nil)))))
+
+(add-hook 'prog-mode-hook 'whitespace-mode)
+#+end_src
+
+*** Editing
+**** Unfilling
+It's a little strange that you can't readily undo =M-x
+fill-paragraph=. This command binds =M-Q= to be the inverse of =M-q=.
+
+#+begin_src emacs-lisp
+(defun my/unfill-paragraph (&optional region)
+    "Takes a multi-line paragraph and makes it into a single line of text."
+    (interactive (progn (barf-if-buffer-read-only) (list t)))
+    (let ((fill-column (point-max))) (fill-paragraph nil region)))
+(bind-key "M-Q" 'my/unfill-paragraph)
+#+end_src
+
+**** LaTeX
+#+begin_src emacs-lisp
+(use-package tex-mode
+  :ensure auctex)
+#+end_src
+
+**** Markdown
+#+begin_src emacs-lisp
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+#+end_src
+
+**** Flycheck
+#+begin_src emacs-lisp
+(use-package flycheck
+  :init (add-hook 'prog-mode-hook 'flycheck-mode))
+#+end_src
+
+**** Company
+Autocompletion framework for Emacs
+
+#+begin_src emacs-lisp
+(use-package company
+  :init (add-hook 'prog-mode-hook 'company-mode)
+  :config (setq company-tooltip-align-annotations t)
+          (setq company-minimum-prefix-length 1))
+#+end_src
+
+**** Language Server Protocol (LSP)
+#+begin_src emacs-lisp
+(use-package lsp-mode)
+
+(use-package lsp-ui
+  :init (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package company-lsp
+  :init (push 'company-lsp company-backends))
+#+end_src
+
+**** Bash
+***** Arch Linux PKGBUILDS
+A =PKGBUILD= should be treated like a shell script.
+
+#+begin_src emacs-lisp
+(add-to-list 'auto-mode-alist '("PKGBUILD\\'" . shell-script-mode))
+#+end_src
+
+**** TOML
+#+begin_src emacs-lisp
+(use-package toml-mode)
+#+end_src
+
+**** Rust
+With =rustup=, run =rustup update nightly= and =rustup component add
+rls-preview rust-analysis rust-src=.
+
+#+begin_src emacs-lisp
+(use-package rust-mode)
+
+(use-package flycheck-rust
+  :init (with-eval-after-load 'rust-mode (add-hook 'flycheck-mode-hook 'flycheck-rust-setup)))
+
+(use-package lsp-rust
+  :config (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
+  :init (add-hook 'rust-mode-hook 'lsp-rust-enable))
+#+end_src
+
+**** MIPS
+#+begin_src emacs-lisp
+(use-package mips-mode
+  :mode "\\.mips$")
+#+end_src
+
+**** Python
+#+begin_src emacs-lisp
+(use-package anaconda-mode
+  :config (add-hook 'python-mode-hook 'anaconda-mode))
+
+(use-package company-anaconda
+  :requires company
+  :config (add-to-list 'company-backends 'company-anaconda))
+
+(use-package virtualenvwrapper)
+
+;; Python only bindings
+(evil-leader/set-key-for-mode 'python-mode
+  "avw" 'venv-workon
+  "avd" 'venv-deactivate
+  )
+#+end_src

@@ -1,58 +1,12 @@
-;;; init.el --- Spacemacs Initialization File
+;;; init.el --- Entry point for Emacs configuration
+;;; Commentary:
 ;;
-;; Copyright (c) 2012-2017 Sylvain Benner & Contributors
-;;
-;; Author: Sylvain Benner <sylvain.benner@gmail.com>
-;; URL: https://github.com/syl20bnr/spacemacs
-;;
-;; This file is not part of GNU Emacs.
-;;
-;;; License: GPLv3
+;; Loads the literate config file, then runs all of the included
+;; elisp.
 
-;; Without this comment emacs25 adds (package-initialize) here
-;; (package-initialize)
+;;; Code:
 
-;; Increase gc-cons-threshold, depending on your system you may set it back to a
-;; lower value in your dotfile (function `dotspacemacs/user-config')
-(setq gc-cons-threshold 100000000)
+(org-babel-load-file "~/.emacs.d/emacs-config.org")
 
-(defconst spacemacs-version         "0.200.13" "Spacemacs version.")
-(defconst spacemacs-emacs-min-version   "24.4" "Minimal version of Emacs.")
-(setq browse-url-browser-function 'browse-url-firefox)
+;;; init.el ends here
 
-
-(if (not (version<= spacemacs-emacs-min-version emacs-version))
-    (error (concat "Your version of Emacs (%s) is too old. "
-                   "Spacemacs requires Emacs version %s or above.")
-           emacs-version spacemacs-emacs-min-version)
-  (load-file (concat (file-name-directory load-file-name)
-                     "core/core-load-paths.el"))
-  (require 'core-spacemacs)
-  (spacemacs/init)
-  (configuration-layer/sync)
-  (spacemacs-buffer/display-startup-note)
-  (spacemacs/setup-startup-hook)
-  (require 'server)
-  (unless (server-running-p) (server-start)))
-
-(add-to-list 'load-path "~/.emacs.d/manual_pkg")
-(load "flycheck-google-cpplint")
-
-(eval-after-load 'flycheck
-  '(progn
-     (require 'flycheck-google-cpplint)
-     ;; Add Google C++ Style checker.
-     ;; In default, syntax checked by Clang and Cppcheck.
-     (flycheck-add-next-checker 'c/c++-cppcheck
-                                '(warning . c/c++-googlelint))))
-(flycheck-add-next-checker 'c/c++-clang
-                           '(warning . c/c++-googlelint))
-
-(eval-after-load "company"
-  '(add-to-list 'company-backends 'company-anaconda))
-
-(set-face-attribute 'flycheck-error nil :underline '(:color "red2" :style wave))
-
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-
-(require 'mips-mode)

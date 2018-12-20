@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH=/usr/share/oh-my-zsh/
+export ZSH=/usr/share/oh-my-zsh/
 source /usr/share/zsh/scripts/zplug/init.zsh 
 source /home/patrick/.gem/ruby/2.5.0/bin
 
@@ -115,8 +115,9 @@ source /usr/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 # For work environment vars
 source ~/.work_env
 
+# For Go related things
 export PATH=$PATH:/usr/local/go/bin
-export GOPATH=/home/patrick/Code/Go
+export GOPATH=$HOME/Code/Go
 export PATH="$PATH:$GOPATH/bin"
 
 # In case this was somehow not set

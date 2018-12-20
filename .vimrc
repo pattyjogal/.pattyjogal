@@ -55,6 +55,8 @@ Plug 'avakhov/vim-yaml'
 " Rust
 Plug 'cespare/vim-toml'
 
+" Go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " Notetaking
 Plug 'xolox/vim-notes'
 Plug 'xolox/vim-misc'

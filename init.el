@@ -6,7 +6,7 @@
 
 ;;; Code:
 
+(setq vc-handled-backends nil)
 (org-babel-load-file "~/.emacs.d/emacs-config.org")
 
 ;;; init.el ends here
-

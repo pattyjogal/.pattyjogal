@@ -189,14 +189,11 @@ enable this theme for the first time.
 (display-time-mode 1)
 #+end_src
 
-**** Whitespace Mode
+**** Indentation Blocks
+I like seeing the indentation blocks, since I primarily develop in Python
 #+begin_src emacs-lisp
-(custom-set-faces
-  '(whitespace-space ((t (:foreground "dim gray" :background nil))))
-  '(whitespace-line  ((t (:foreground "dim gray" :background nil))))
-  '(whitespace-empty ((t (:foreground nil :background nil)))))
-
-(add-hook 'prog-mode-hook 'whitespace-mode)
+(use-package highlight-indentation
+  :init (highlight-indentation-mode))
 #+end_src
 
 *** Editing

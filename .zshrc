@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/usr/share/oh-my-zsh/
+export ZSH=/usr/share/oh-my-zsh
 source /usr/share/zsh/scripts/zplug/init.zsh 
 source /home/patrick/.gem/ruby/2.5.0/bin
 

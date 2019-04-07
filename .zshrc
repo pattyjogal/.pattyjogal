@@ -2,9 +2,8 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/usr/share/oh-my-zsh/
+export ZSH=/usr/share/oh-my-zsh
 source /usr/share/zsh/scripts/zplug/init.zsh 
-source /home/patrick/.gem/ruby/2.5.0/bin
 
 # CUSTOM EXPORTS
 export TERM=xterm-256color
@@ -120,6 +119,10 @@ export PATH=$PATH:/usr/local/go/bin
 export GOPATH=$HOME/Code/Go
 export PATH="$PATH:$GOPATH/bin"
 
+# Ruby
+export PATH="$PATH:/root/.gem/ruby/2.6.0/bin"
+export PATH="$PATH:$HOME/.gem/ruby/2.6.0/bin"
+
 # In case this was somehow not set
 export PATH="$PATH:/usr/bin"
 # virtualenvwrapper stuff
@@ -131,3 +134,4 @@ export PATH=$PATH:$HOME/.cargo/bin
 
 # For Ruby
 export PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

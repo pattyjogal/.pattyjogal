@@ -91,6 +91,7 @@ A few settings to get things as Spacemacs-ey as possible.
   :config (evil-mode))
 
 (load-file "~/.emacs.d/lisp/evil-leader.el")
+(load-file "~/.emacs.d/lisp/flycheck-xo.el")
 
 (require 'evil-leader)
 (global-evil-leader-mode)
@@ -99,9 +100,14 @@ A few settings to get things as Spacemacs-ey as possible.
   "p"   'projectile-command-map
   "f"   'helm-find-files
   "g"   'magit-status
+  "bl"  'list-bookmarks
+  "bs"  'bookmark-set
   "d"   (lambda ()
           (interactive)
           (find-file "~/.emacs.d/emacs-config.org"))
+
+  "<tab>" 'switch-to-prev-buffer
+  "<SPC>" 'helm-M-x
   )
 (use-package spaceline-config
   :ensure spaceline
@@ -117,9 +123,19 @@ A few settings to get things as Spacemacs-ey as possible.
 For working in larger projects, and keeping track of all of 'em.
 #+begin_src emacs-lisp
 (use-package projectile
-  :config (projectile-mode +1))
+    :config (projectile-mode +1))
 
 (use-package helm-projectile)
+#+end_src
+
+**** Speedbar
+
+#+begin_src emacs-lisp
+(use-package speedbar)
+(use-package sr-speedbar)
+(evil-leader/set-key
+  "po" 'sr-speedbar-toggle
+)
 #+end_src
 
 **** Helm
@@ -132,8 +148,16 @@ Helm makes it easy to complete various things.
 
 (global-set-key "\C-x\C-f" 'helm-find-files)
 (global-set-key "\M-x" 'helm-M-x)
+(setq helm-bookmark-show-location t)
 
 (ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
+#+end_src
+
+**** Treemacs
+#+begin_src emacs-lisp
+(use-package treemacs)
+(use-package treemacs-evil)
+(use-package treemacs-projectile)
 #+end_src
 
 **** Abbrev mode
@@ -276,9 +300,9 @@ rls-preview rust-analysis rust-src=.
 (use-package flycheck-rust
   :init (with-eval-after-load 'rust-mode (add-hook 'flycheck-mode-hook 'flycheck-rust-setup)))
 
-(use-package lsp-rust
-  :config (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
-  :init (add-hook 'rust-mode-hook 'lsp-rust-enable))
+;;(use-package lsp-rust
+;;  :config (setq lsp-rust-rls-command '("rustup" "run" "nightly" "rls"))
+;;  :init (add-hook 'rust-mode-hook 'lsp-rust-enable))
 #+end_src
 
 **** MIPS
@@ -303,4 +327,48 @@ rls-preview rust-analysis rust-src=.
   "avw" 'venv-workon
   "avd" 'venv-deactivate
   )
+#+end_src
+
+**** JavaScript
+#+begin_src emacs-lisp
+(use-package js2-mode)
+(use-package indium)
+(use-package company-tern)
+(add-to-list 'company-backends 'company-tern)
+#+end_src
+Switch flycheck backend to xo
+#+begin_src emacs-lisp
+(require 'flycheck-xo)
+(flycheck-xo-setup)
+#+end_src
+
+#+begin_src emacs-lisp
+(defun shell-command-on-region-to-string (start end command)
+  (with-output-to-string
+    (shell-command-on-region start end command standard-output)))
+
+(defun xo-fix-buffer ()
+  (interactive)
+  (number-to-register (point) 241)
+  (call-shell-region
+    (point-min) (point-max)
+    "xo --stdin --fix"
+    t
+    (current-buffer)
+    )
+  (goto-char (get-register 241))
+  ()
+)
+
+(evil-leader/set-key-for-mode 'js2-mode
+  "axf" 'xo-fix-buffer
+  "x" 'xo-fix-buffer
+)
+
+#+end_src
+
+**** C
+#+begin_src emacs-lisp
+(use-package cquery)
+(setq cquery-executable "/bin/cquery")
 #+end_src

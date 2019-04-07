@@ -121,6 +121,11 @@ For working in larger projects, and keeping track of all of 'em.
 (use-package helm-projectile)
 #+end_src
 
+**** The Silver Searcher
+#+begin_src emacs-lisp
+(use-package ag)
+#+end_src
+
 **** Helm
 Helm makes it easy to complete various things.
 
@@ -197,6 +202,13 @@ I like seeing the indentation blocks, since I primarily develop in Python
 #+end_src
 
 *** Editing
+**** SSH for CS241
+#+begin_src emacs-lisp
+(defun connect-remote ()
+  (interactive)
+  (dired "/ssh:pjg4@sp19-cs241-184.cs.illinois.edu:/"))
+#+end_src
+
 **** Unfilling
 It's a little strange that you can't readily undo =M-x
 fill-paragraph=. This command binds =M-Q= to be the inverse of =M-q=.

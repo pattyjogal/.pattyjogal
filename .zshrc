@@ -125,3 +125,9 @@ export PATH="$PATH:/usr/bin"
 # virtualenvwrapper stuff
 export WORKON_HOME=~/Envs
 source virtualenvwrapper.sh
+
+# For Rust related things
+export PATH=$PATH:$HOME/.cargo/bin
+
+# For Ruby
+export PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"

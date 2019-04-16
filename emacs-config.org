@@ -345,6 +345,7 @@ rls-preview rust-analysis rust-src=.
 (use-package js2-mode)
 (use-package indium)
 (use-package company-tern)
+(use-package rjsx-mode)
 (add-to-list 'company-backends 'company-tern)
 #+end_src
 Switch flycheck backend to xo
@@ -363,7 +364,7 @@ Switch flycheck backend to xo
   (number-to-register (point) 241)
   (call-shell-region
     (point-min) (point-max)
-    "xo --stdin --fix"
+    (format "xo --stdin --fix --stdin-filename=%s" (buffer-file-name))
     t
     (current-buffer)
     )

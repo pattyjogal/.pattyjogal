@@ -129,4 +129,12 @@ export PATH="$PATH:/usr/bin"
 export WORKON_HOME=~/Envs
 source virtualenvwrapper.sh
 
+# For Rust related things
+export PATH=$PATH:$HOME/.cargo/bin
+
+# For Ruby
+export PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# For JS Paths
+export PATH="$PATH:$(yarn global dir 2> /dev/null)"

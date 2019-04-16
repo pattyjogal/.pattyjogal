@@ -234,6 +234,13 @@ fill-paragraph=. This command binds =M-Q= to be the inverse of =M-q=.
 (bind-key "M-Q" 'my/unfill-paragraph)
 #+end_src
 
+**** "Pair" programming
+I like having paired parens, braces, and whatnot
+#+begin_src emacs-lisp
+(electric-pair-mode 1)
+(setq electric-pair-preserve-balance nil)
+#+end_src
+
 **** LaTeX
 #+begin_src emacs-lisp
 (use-package tex-mode
